@@ -7,7 +7,7 @@ import math
 # =========================
 # Load only first N relationships from file
 # =========================
-N = 100
+N = 1000
 
 with open("relationships.json") as f:
     data = json.load(f)
