@@ -96,19 +96,6 @@ MODEL.WEIGHTS "put your .pth checkpoint path here"
 | ResNet50-4S-FPN×2   | [download](https://drive.google.com/file/d/10rtVr16RO2hd_JyiaBh8eNuxHvyTENR1/view?usp=sharing) | [yaml](configs/FCSGG-Res50-BiFPN-P2P5-MultiscaleHead-MS.yaml) |
 | HRNetW48-5S-FPN×2  | [download](https://drive.google.com/file/d/1T7zZ_Rq5_mBhf1G89ab4w_SKz39IucsG/view?usp=sharing) | [yaml](configs/FCSGG_HRNet_W48_DualHRFPN_5s_Fixsize_640x1024_MS.yaml) |
 
-## Citation
-If you find our code or method helpful, please use the following BibTex entry.
-```
-@inproceedings{liu2021fully,
-  title={Fully Convolutional Scene Graph Generation},
-  author={Liu, Hengyue and Yan, Ning and Mortazavi, Masood and Bhanu, Bir},
-  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
-  pages={11546--11556},
-  year={2021}
-}
-```
-
-
 ## Assignment 1
 
 https://docs.google.com/document/d/11bVcx9MvdfxiGMP9W6w4-COqAx4Cv0IoTGVYZuy70e8/edit?usp=sharing
