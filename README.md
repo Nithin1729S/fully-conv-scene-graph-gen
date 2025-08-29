@@ -115,6 +115,8 @@ If you find our code or method helpful, please use the following BibTex entry.
 
 ## Assignment 1
 
+https://docs.google.com/document/d/11bVcx9MvdfxiGMP9W6w4-COqAx4Cv0IoTGVYZuy70e8/edit?usp=sharing
+
 Download relationships.json file from [here](https://homes.cs.washington.edu/~ranjay/visualgenome/api.html) and store it in Assignment_1 folder. 
 
 Run `explorer.html` to visualize the dataset connections.

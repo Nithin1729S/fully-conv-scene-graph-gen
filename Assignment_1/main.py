@@ -4,10 +4,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
+# =========================
 # Load only first N relationships from file
+# =========================
 N = 100
 
-with open("../relationships.json") as f:
+with open("relationships.json") as f:
     data = json.load(f)
 
 G = nx.DiGraph()
@@ -127,7 +129,7 @@ plt.title("Clustering Coefficient vs Degree")
 plt.show()
 
 # =========================
-# AVG CC by DEGREE GROUPS (FIXED)
+# AVG CC by DEGREE GROUPS
 # =========================
 degrees_arr = np.array(list(deg_list.values()))
 p25 = np.percentile(degrees_arr, 25)
@@ -148,3 +150,95 @@ else:
 
 print("Avg CC (low-degree nodes):", avg_cc_low)
 print("Avg CC (high-degree nodes):", avg_cc_high)
+
+# =========================
+# STRONGLY / WEAKLY CONNECTED COMPONENTS
+# =========================
+if G.is_directed():
+    sccs = list(nx.strongly_connected_components(G))
+    scc_sizes = sorted([len(c) for c in sccs], reverse=True)
+    print("\nNumber of SCCs:", len(sccs))
+    print("SCC size distribution (top 10):", scc_sizes[:10])
+
+    wccs = list(nx.weakly_connected_components(G))
+    wcc_sizes = sorted([len(c) for c in wccs], reverse=True)
+    print("Number of WCCs:", len(wccs))
+    print("WCC size distribution (top 10):", wcc_sizes[:10])
+else:
+    comps = list(nx.connected_components(G))
+    comp_sizes = sorted([len(c) for c in comps], reverse=True)
+    print("\nNumber of connected components:", len(comps))
+    print("Component size distribution (top 10):", comp_sizes[:10])
+
+# =========================
+# GIANT COMPONENT & COVERAGE
+# =========================
+if G.is_directed():
+    largest_wcc = max(nx.weakly_connected_components(G), key=len)
+    G_giant = G.subgraph(largest_wcc).copy()
+else:
+    largest_cc = max(nx.connected_components(G), key=len)
+    G_giant = G.subgraph(largest_cc).copy()
+
+n_total, m_total = G.number_of_nodes(), G.number_of_edges()
+n_giant, m_giant = G_giant.number_of_nodes(), G_giant.number_of_edges()
+
+print("\n=== Giant Component ===")
+print(f"Giant nodes: {n_giant}/{n_total} ({100*n_giant/n_total:.2f}%)")
+print(f"Giant edges: {m_giant}/{m_total} ({100*m_giant/m_total:.2f}%)")
+
+deg_all = np.mean([d for _, d in G.degree()]) if n_total > 0 else float('nan')
+deg_giant = np.mean([d for _, d in G_giant.degree()]) if n_giant > 0 else float('nan')
+cc_all = nx.average_clustering(G.to_undirected())
+cc_giant = nx.average_clustering(G_giant.to_undirected())
+
+print("Avg degree - full graph:", deg_all, "giant:", deg_giant)
+print("Avg clustering - full graph:", cc_all, "giant:", cc_giant)
+
+# =========================
+# GIANT COMPONENT PATH METRICS + SMALL-WORLD CHECK
+# =========================
+Gu = G_giant.to_undirected()
+n, m = Gu.number_of_nodes(), Gu.number_of_edges()
+
+if n > 1 and nx.is_connected(Gu):
+    giant_avg_path = nx.average_shortest_path_length(Gu)
+    giant_diam = nx.diameter(Gu)
+else:
+    giant_avg_path = float('nan')
+    giant_diam = float('nan')
+
+giant_cc = nx.average_clustering(Gu)
+
+print("\nGiant component avg path length:", giant_avg_path)
+print("Giant component diameter:", giant_diam)
+print("Giant component avg clustering:", giant_cc)
+
+p = (2.0*m)/(n*(n-1)) if n > 1 else 0.0
+expected_cc_random = p
+avg_deg = np.mean([d for _, d in G_giant.degree()]) if n > 0 else float('nan')
+approx_rand_path = math.log(n)/math.log(avg_deg) if n>1 and avg_deg>1 else float('nan')
+
+print("Random-graph expected clustering:", expected_cc_random)
+print("Approx random path length:", approx_rand_path)
+
+if not math.isnan(giant_cc) and expected_cc_random > 0:
+    if giant_cc > 5*expected_cc_random and not math.isnan(giant_avg_path) and not math.isnan(approx_rand_path):
+        if giant_avg_path <= 2*approx_rand_path:
+            print("Small-world features: LIKELY")
+        else:
+            print("Small-world features: UNCERTAIN")
+    else:
+        print("Small-world features: UNLIKELY")
+
+# =========================
+# K-CORE DECOMPOSITION (ROBUSTNESS)
+# =========================
+print("\n=== K-core Decomposition ===")
+
+# remove self-loops, otherwise nx.k_core crashes
+Gu.remove_edges_from(nx.selfloop_edges(Gu))
+
+for k in range(1, 6):
+    core = nx.k_core(Gu, k=k)
+    print(f"k={k}: nodes={core.number_of_nodes()}, edges={core.number_of_edges()}")
