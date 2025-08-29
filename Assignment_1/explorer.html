@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Visual Genome Relation Explorer</title>
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="//cdn.rawgit.com/newrelic-forks/d3-plugins-sankey/master/sankey.js"></script>
+    <script src="//cdn.rawgit.com/misoproject/d3.chart/master/d3.chart.min.js"></script>
+    <script src="//cdn.rawgit.com/q-m/d3.chart.sankey/master/d3.chart.sankey.min.js"></script>
+    <script src="explorer.js"></script>
+    <style>
+      body {
+        font: 10px sans-serif;
+        
+        position:absolute;
+        top:2%;
+        bottom:0px;
+        left:5%;
+        right:0px;
+      }
+      #chart {
+        width: 95%;
+        height: 90%;
+      }
+      .node rect {
+        fill-opacity: .9;
+        shape-rendering: crispEdges;
+      }
+      .node text {
+        font-size: 14px;
+        pointer-events: none;
+        text-shadow: 0 1px 0 #fff;
+      }
+      .link {
+        fill: none;
+        stroke: #000;
+        stroke-opacity: .2;
+      }
+      .link:hover {
+        stroke-opacity: .5;
+      }
+      .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <span>
+        <h1>Visual Genome Relation Explorer - <a href="https://bbukaty.github.io/VG-relations/">Info</a></h1>
+      </span>
+    <div id="loadDiv" class="center">
+      <img id="loadGif" src="loading.gif" alt="Loading VG Data...">
+      <h2 id="loadError" style="visibility: hidden;">Error loading Visual Genome Data</h2>
+    </div>
+    <div id="chart" ></div>
+    <span id="subjInput" style="visibility: hidden">
+      <form onSubmit="return captureForm()">
+        Subject: <input type="text" id="subject">
+        <input type="submit" value="Submit">
+      </form>
+    </span>
+    <span id="subjError" style="visibility: hidden; color: red">
+      Error: subject not in database. Please make another selection.
+    </span>
+  </body>
+</html>
