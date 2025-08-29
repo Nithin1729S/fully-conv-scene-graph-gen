@@ -45,8 +45,6 @@ rm datasets/vg/images2.zip
   
 2. Download the [scene graphs](https://1drv.ms/u/s!AmRLLNf6bzcir8xf9oC3eNWlVMTRDw?e=63t7Ed) and extract them to `datasets/vg/VG-SGG-with-attri.h5`.
 
-If use other paths, one may need to modify the related paths in file [visual_genome.py](fcsgg/data/datasets/visual_genome.py).
-
 The correct structure of files should be
 
 ```
