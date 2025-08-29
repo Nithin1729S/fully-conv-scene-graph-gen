@@ -6,10 +6,6 @@ A PyTorch implementation for the paper:
 
 Fully Convolutional Scene Graph Generation \[[paper](https://arxiv.org/abs/2103.16083)\], CVPR 2021
 
-Hengyue Liu<sup>*</sup>, Ning Yan, Masood Mortazavi, Bir Bhanu.  
-
-<sup>*</sup> Work done in part as an intern at Futurewei Technologies Inc.
-
 ## Installation
 
 The project is built upon [Detectron2](https://github.com/facebookresearch/detectron2). We incorporate Detectron2 as the submodule for easy use.
